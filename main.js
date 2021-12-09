@@ -6,22 +6,45 @@ addToDoButton.addEventListener('click',function(){
     var note = document.createElement('input')
     note.classList.add('checkbox-styling');
     note.type="checkbox"
-    note.id = 'checkbox'
+    note.id = 'note_checkbox'
     note.value = inputField.value;
-    checkbox_label = document.createElement('checkbox_label')
-    checkbox_label.htmlfor = 'checkbox'
+    checkbox_label = document.createElement('label')
+    checkbox_label.htmlfor = 'note_checkbox'
     checkbox_label.appendChild(document.createTextNode(inputField.value));
     checkbox_label.classList.add('paragraph-styling');
 
+
     toDoContainer.appendChild(note);
     toDoContainer.appendChild(checkbox_label);
+
+
+    var linebreak = document.createElement('br');
+    toDoContainer.appendChild(linebreak);
     note.addEventListener('change',function(){
-        if (this.checked) {
-            checkbox_label.style.textDecoration = "line-through";
+        var label = this.nextSibling
+        if (note.checked == true) {
+            label.style.textDecoration = "line-through";
         } else {
-            checkbox_label.style.textDecoration = "initial";
+            label.style.textDecoration = "initial";
           }
     })
+
+    checkbox_label.ondblclick=function(){
+		var val=this.innerHTML;
+		var input=document.createElement("input");
+		input.value=val;
+		input.onblur=function(){
+			var val=this.value;
+			this.parentNode.innerHTML=val;
+		}
+		this.innerHTML="";
+		this.appendChild(input);
+        input.addEventListener('keyup',function(e){
+            if (e.which == 13) input.blur();
+        })
+		input.focus();
+	}
+
     inputField.value = ""
 })
 

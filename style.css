@@ -33,12 +33,14 @@ html, body {
 }
 
 #ToDohead {
-    width: 50px;
+    width: 50%;
+    margin: 0 auto;
     color: lightcoral;
     height: 50px;
     outline: none;
     font-size: 50px;
     vertical-align: middle;
+    margin-bottom: 10px;
 
 }
 
@@ -57,11 +59,10 @@ html, body {
 }
 
 .paragraph-styling {
-    margin 10;
     cursor: pointer;
     font-size: 20px;
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    margin-left: 15px;
     outline: none;
     font-size: 30px;
     vertical-align: middle;
