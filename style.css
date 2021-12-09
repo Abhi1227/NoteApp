@@ -5,11 +5,11 @@ html, body {
 }
 
 .container {
-    width: 360px;
+    width: 600px;
 }
 
 #inputField {
-    width: 300px;
+    width: 550px;
     height: 50px;
     border: 1px solid black;
     outline: none;
@@ -67,3 +67,67 @@ html, body {
     font-size: 30px;
     vertical-align: middle;
 }
+
+.action{
+    display:none;
+    margin-top: 20px;
+}
+
+#items-left {
+    display: inline;
+    margin-right: 10px;
+}
+
+/* Style the links inside the pill navigation menu */
+.pill-nav a {
+    display: inline;
+    color: black;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    font-size: 12px;
+    border-radius: 5px;
+  }
+  
+  /* Change the color of links on mouse-over */
+  .pill-nav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .pill-nav a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+
+.actionbutton {
+  height: 30px;
+  width: 80px;
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px #999;
+  }
+  
+  .actionbutton:hover {background-color: #3e8e41}
+  
+  .actionbutton:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+#ClearCompleted {
+    display: none;
+    width: 40%;
+    text-align: right;
+}
+#ClearCompleted:hover {
+    text-decoration: underline;
+  }
