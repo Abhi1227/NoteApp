@@ -9,56 +9,20 @@ let completedButton = document.getElementById("CompletedButton");
 let clearCompleted = document.getElementById("ClearCompleted");
 
 
+//var arrayobj = [];
 var arrayobj = [];
 var buttonSelected = "All"
 // Event bubbling  //hash unique identifier  //object storage
+
+document.addEventListener('DOMContentLoaded', function () {
+    getValues();
+}, false);
+
 addToDoButton.addEventListener('click', function () {
-    var note_item = {};
-    var i = 0;
-
-    var note = document.createElement('input')
-    note.classList.add('checkbox-styling');
-    note.type = "checkbox";
-    note.id = 'note_checkbox';
-    note.value = inputField.value;
-    checkbox_label = document.createElement('label');
-    checkbox_label.htmlfor = 'note_checkbox';
-    checkbox_label.appendChild(document.createTextNode(inputField.value));
-    checkbox_label.classList.add('paragraph-styling');
-
-
-
-    note.addEventListener('change', function () {
-
-        if (note.checked == true) {
-            note_item.activestate = false;
-        } else {
-            note_item.activestate = true;
-        }
-        refreshNotes(arrayobj)
-    })
-
-    checkbox_label.ondblclick = function () {
-        var val = this.innerHTML;
-        var input = document.createElement("input");
-        input.value = val;
-        input.onblur = function () {
-            var val = this.value;
-            this.parentNode.innerHTML = val;
-        }
-        this.innerHTML = "";
-        this.appendChild(input);
-        input.addEventListener('keyup', function (e) {
-            if (e.which == 13) input.blur();
-        })
-        input.focus();
+    if (inputField.value != "") {
+        insertHTML(inputField.value);
+        store(arrayobj);
     }
-    note_item.chkbox = note;
-    note_item.label = checkbox_label;
-    note_item.activestate = true;
-    arrayobj.push(note_item);
-    refreshNotes(arrayobj)
-    inputField.value = ""
 })
 
 inputField.addEventListener("keyup", function (event) {
@@ -85,11 +49,16 @@ completedButton.addEventListener('click', function () {
 });
 
 clearCompleted.addEventListener('click', function () {
-    arrayobj.forEach((note_item, index, array) => {
-        if (note_item.activestate == false){
-            arrayobj.splice(index,1);
-    }
-    });
+    let i = 0;
+    while (i < arrayobj.length) {
+        var note_item = arrayobj[i];
+        if (note_item.activestate == false) {
+            arrayobj.splice(i, 1);
+        } else {
+            i++;
+        }
+    };
+    store(arrayobj);
     refreshNotes(arrayobj);
 });
 
@@ -109,12 +78,14 @@ function refreshNotes(array_notes) {
                 displayNotes(note_item);
             }
         }
-        
+
         if (note_item.activestate == true) {
             note_item.label.style.textDecoration = "initial";
+            note_item.chkbox.checked = false;
             activeCount++;
         } else {
             note_item.label.style.textDecoration = "line-through";
+            note_item.chkbox.checked = true;
             inactiveCount++;
         }
     });
@@ -132,8 +103,101 @@ function refreshNotes(array_notes) {
 }
 
 function displayNotes(note_item) {
+
     toDoContainer.appendChild(note_item.chkbox);
+    note_item.label.innerHTML = note_item.label_value;
     toDoContainer.appendChild(note_item.label);
     var linebreak = document.createElement('br');
     toDoContainer.appendChild(linebreak);
+
+}
+
+function insertHTML(value, id = 0, state = true) {
+    var note_item = {};
+    var i = 0;
+
+    var note = document.createElement('input')
+    note.classList.add('checkbox-styling');
+    note.type = "checkbox";
+    note.id = 'note_checkbox';
+    note.value = value;
+    checkbox_label = document.createElement('label');
+    checkbox_label.htmlfor = 'note_checkbox';
+    //checkbox_label.innerHTML = value;
+    checkbox_label.classList.add('paragraph-styling');
+
+
+
+    note.addEventListener('change', function () {
+
+        if (note.checked == true) {
+            note_item.activestate = false;
+            index = arrayobj.findIndex(x => x.id == note_item.id);
+            arrayobj[index] = note_item;
+        } else {
+            note_item.activestate = true;
+            index = arrayobj.findIndex(x => x.id == note_item.id);
+            arrayobj[index] = note_item;
+        }
+        store(arrayobj);
+        refreshNotes(arrayobj);
+    })
+
+    checkbox_label.ondblclick = function () {
+        var val = this.innerHTML;
+        var input = document.createElement("input");
+        input.value = val;
+        input.onblur = function () {
+            var val = this.value;
+            this.parentNode.innerHTML = val;
+            note_item.label_value = val;
+            index = arrayobj.findIndex(x => x.id == note_item.id);
+            arrayobj[index] = note_item;
+            store(arrayobj);
+        }
+        this.innerHTML = "";
+        this.appendChild(input);
+
+        input.addEventListener('keyup', function (e) {
+            if (e.which == 13) input.blur();
+        })
+        input.focus();
+    }
+    if (id == 0) {
+        note_item.id = generateId();
+    } else {
+        note_item.id = id;
+    }
+    note_item.chkbox = note;
+    note_item.label = checkbox_label;
+    note_item.label_value = value;
+    note_item.activestate = state;
+    arrayobj.push(note_item);
+    refreshNotes(arrayobj)
+    inputField.value = ""
+}
+
+function store(array_notes) {
+    localStorage.setItem("notesData", JSON.stringify(Array.from(array_notes)));
+}
+
+//Keep data after page refresh or closing browser
+
+function getValues() {
+    var storedArray = Array.from(JSON.parse(localStorage.getItem("notesData") || "[]"));
+    if (storedArray) {
+        Array.from(storedArray).forEach((note_item, index, array) => {
+            insertHTML(note_item.label_value, note_item.id, note_item.activestate);
+        });
+    }
+}
+
+
+function generateId() {
+    let id = () => {
+        return Math.floor((1 + Math.random()) * 0x100000)
+            .toString(16)
+            .substring(1);
+    }
+    return id();
 }
