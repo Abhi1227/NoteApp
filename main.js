@@ -115,7 +115,6 @@ function displayNotes(note_item) {
 function insertHTML(value, id = 0, state = true) {
     var note_item = {};
     var i = 0;
-
     var note = document.createElement('input')
     note.classList.add('checkbox-styling');
     note.type = "checkbox";
