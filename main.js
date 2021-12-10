@@ -128,17 +128,10 @@ function insertHTML(value, id = 0, state = true) {
 
 
 
-    note.addEventListener('change', function () {
-
-        if (note.checked == true) {
-            note_item.activestate = false;
-            index = arrayobj.findIndex(x => x.id == note_item.id);
-            arrayobj[index] = note_item;
-        } else {
-            note_item.activestate = true;
-            index = arrayobj.findIndex(x => x.id == note_item.id);
-            arrayobj[index] = note_item;
-        }
+    note.addEventListener('change', function () { //seperate file
+        note_item.activestate = !note_item.activestate;
+        index = arrayobj.findIndex(x => x.id == note_item.id);
+        arrayobj[index] = note_item;
         store(arrayobj);
         refreshNotes(arrayobj);
     })
